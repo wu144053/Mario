@@ -5,6 +5,7 @@ from PyQt5.QtCore import QRect,Qt
 from PyQt5.QtGui  import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QTimer
+
 class Mario(QWidget):
     MARIO_X =80
     MARIO_Y =580
@@ -47,6 +48,8 @@ class Mario(QWidget):
     MONEY1_DISPLAY = True
     MONEY2_DISPLAY = True
     MONEY3_DISPLAY = True
+
+    KUNKUN_DISPLAY = False
 
     DIMONDS_FLAG = 0
     HINT_FLAG = 0
@@ -108,6 +111,8 @@ class Mario(QWidget):
         self.hit_diamonds(mario_rect,self.MARIO_X + 600,self.MARIO_Y - 200,100,100)
         self.hit_diamods8(mario_rect,self.MARIO_X + 1100,self.MARIO_Y - 300,100,100)
         self.hit_diamods9(mario_rect,self.MARIO_X + 600,self.MARIO_Y - 300,100,100)
+        self.draw_kun_(painter)
+
     def keyPressEvent(self, QKeyEvent):
         key = QKeyEvent.key()
         if key == Qt.Key_Right:
@@ -157,6 +162,7 @@ class Mario(QWidget):
         if (mario_rect.intersected(badt_rect)):
             self.hit_mario()
         if (mario_rect.intersected(tower_rect)):
+            self.KUNKUN_DISPLAY = True
             self.HUOJIAN = True
             self.GAMEWIN = True
 
@@ -319,6 +325,16 @@ class Mario(QWidget):
                 if self.ROCKT_ACTION + 400<= 0 :
                      self.ROCKT_ACTION = 0
                      self.ROCK_LAUNCH = True
+    def draw_kun_(self,painter):
+        if self.KUNKUN_DISPLAY== True:
+            rocket_rect = QRect(1300,  self.ROCKT_ACTION-100, 300, 300)
+            rocket_img = QImage("images/OIP__1_-removebg-preview.png")
+            painter.drawImage(rocket_rect, rocket_img)
+            if self.HUOJIAN == True and self.ROCK_LAUNCH == False:
+                self.ROCKT_ACTION -= 5
+                if self.ROCKT_ACTION + 400<= 0 :
+                    self.ROCKT_ACTION = 0
+                    self.ROCK_LAUNCH = True
 
     def draw_monster(self,painter):
         monster_rect = QRect(self.MONSTER_ACTION_X, self.MONSTER_ACTION_Y, 100, 100)
